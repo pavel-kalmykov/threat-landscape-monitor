@@ -38,7 +38,7 @@ GitHub Actions runs the Bruin pipeline daily at 06:00 UTC.
 | Cloud | Google Cloud Platform (BigQuery, GCS) |
 | Ingestion, transformation, orchestration | Bruin |
 | Data Warehouse | BigQuery |
-| Visualization | Looker Studio |
+| Visualization | Streamlit + Plotly |
 | CI/CD | GitHub Actions |
 
 ## Data sources
@@ -118,7 +118,11 @@ Connect Looker Studio to the `mart_takedown_analysis` and `mart_threat_trends` t
 
 ## Dashboard
 
-TODO: Add Looker Studio link and screenshot
+Live dashboard: *deployed on Streamlit Community Cloud (link pending)*
+
+Run locally: `uv run streamlit run dashboard.py`
+
+Supports dark and light mode (toggle in top right corner).
 
 ## License
 
