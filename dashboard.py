@@ -163,7 +163,12 @@ DATASET = "threat_intelligence"
 
 @st.cache_data(ttl=3600)
 def query_bq(sql):
-    client = bigquery.Client(project=PROJECT_ID)
+    if "gcp_service_account" in st.secrets:
+        from google.oauth2 import service_account
+        creds = service_account.Credentials.from_service_account_info(dict(st.secrets["gcp_service_account"]))
+        client = bigquery.Client(project=PROJECT_ID, credentials=creds)
+    else:
+        client = bigquery.Client(project=PROJECT_ID)
     return client.query(sql).to_dataframe()
 
 # Only fetch what we need
