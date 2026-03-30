@@ -42,11 +42,12 @@ columns:
 @bruin"""
 
 import io
+import zipfile
 
 import pandas as pd
 import requests
 
-RECENT_DUMP_URL = "https://threatfox.abuse.ch/export/csv/recent/"
+FULL_DUMP_URL = "https://threatfox.abuse.ch/export/csv/full/"
 
 COLUMNS = [
     "first_seen_utc",
@@ -68,14 +69,14 @@ COLUMNS = [
 
 
 def materialize():
-    response = requests.get(RECENT_DUMP_URL, timeout=120)
+    response = requests.get(FULL_DUMP_URL, timeout=120)
     response.raise_for_status()
 
-    lines = [
-        line
-        for line in response.text.splitlines()
-        if not line.startswith("#")
-    ]
+    with zipfile.ZipFile(io.BytesIO(response.content)) as zf:
+        csv_filename = zf.namelist()[0]
+        raw_text = zf.read(csv_filename).decode("utf-8")
+
+    lines = [line for line in raw_text.splitlines() if not line.startswith("#")]
     cleaned_csv = "\n".join(lines)
 
     df = pd.read_csv(
