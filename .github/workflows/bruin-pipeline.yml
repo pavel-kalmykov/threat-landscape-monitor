@@ -1,0 +1,30 @@
+name: Run Threat Landscape Pipeline
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    concurrency:
+      group: bruin-pipeline
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: bruin-data/setup-bruin@main
+
+      - name: Create Bruin config
+        run: echo '${{ secrets.BRUIN_CONFIG }}' > .bruin.yml
+
+      - name: Validate Pipeline
+        run: bruin validate .
+
+      - name: Run Pipeline
+        if: success()
+        run: bruin run .

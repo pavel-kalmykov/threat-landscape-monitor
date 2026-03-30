@@ -1,0 +1,23 @@
+# Bruin credentials (never commit)
+.bruin.yml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Data files
+*.csv
+*.zip
+
+# OS
+.DS_Store
+
+logs/runs
+logs/*.log
