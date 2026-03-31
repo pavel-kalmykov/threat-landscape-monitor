@@ -491,7 +491,8 @@ bigger = "ThreatFox" if tf_recent > url_recent else "URLhaus"
 bigger_n = max(tf_recent, url_recent)
 smaller = "URLhaus" if bigger == "ThreatFox" else "ThreatFox"
 smaller_n = min(tf_recent, url_recent)
-ioc_pct = ioc_types["count"].iloc[0] / ioc_types["count"].sum() * 100
+top_ioc = ioc_types.iloc[0]
+top_ioc_pct = top_ioc["count"] / ioc_types["count"].sum() * 100
 st.markdown(
     f"""
 <div class="callout" style="border-left-color: var(--blue); background: rgba(47,129,247,0.06);">
@@ -500,8 +501,8 @@ st.markdown(
     in late 2025 as the abuse.ch community grew: more reporters, more submissions, more
     visibility into what's happening out there. The daily spikes from December onward are
     the new baseline. On the {IOC} types:
-    <strong style="color:var(--blue)">{ioc_pct:.0f}% are domain names</strong>,
-    because throwaway domains are still the cheapest way to push malware.
+    <strong style="color:var(--blue)">{top_ioc_pct:.0f}% are {top_ioc["ioc_type"]}</strong>,
+    because most malware infrastructure runs on cheap, disposable network endpoints.
 </div>
 """,
     unsafe_allow_html=True,
