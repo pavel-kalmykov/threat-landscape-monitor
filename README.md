@@ -118,7 +118,7 @@ Connect Looker Studio to the `mart_takedown_analysis` and `mart_threat_trends` t
 
 ## Dashboard
 
-Live dashboard: *deployed on Streamlit Community Cloud (link pending)*
+Live dashboard: https://threat-landscape-monitor-vqu4xfx9aqesyp2ogzcgqo.streamlit.app/
 
 Run locally: `uv run streamlit run dashboard.py`
 
