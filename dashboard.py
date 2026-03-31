@@ -578,7 +578,6 @@ fig5 = go.Figure(
         labels=families["malware_family"],
         values=families["daily_count"],
         parents=[""] * len(families),
-        maxdepth=1,
         textinfo="label+value",
         textfont=dict(family="Inter, sans-serif", size=13, color="#ffffff"),
         marker=dict(colors=tree_colors, line=dict(width=2, color=T["bg"])),
