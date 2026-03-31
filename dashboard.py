@@ -542,7 +542,7 @@ st.markdown(
         ThreatFox tags every {IOC} with the malware family behind it.
         Some are {RATS} that let someone else use your machine.
         Some are stealers that grab your passwords. Some are {BOTNET}s.
-        Hover over any block to learn what it does.
+        Hover over any block (or long press on mobile) to learn what it does.
     </div>
 </div>
 """,
