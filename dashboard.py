@@ -3,7 +3,7 @@ import streamlit.components.v1 as components
 import plotly.graph_objects as go
 from google.cloud import bigquery
 
-st.set_page_config(page_title="Threat Landscape Monitor", layout="wide")
+st.set_page_config(page_title="Threat Landscape Monitor", page_icon="https://abuse.ch/favicon.ico", layout="wide")
 
 # =============================================================================
 # THEME
@@ -491,8 +491,12 @@ bigger = "ThreatFox" if tf_recent > url_recent else "URLhaus"
 bigger_n = max(tf_recent, url_recent)
 smaller = "URLhaus" if bigger == "ThreatFox" else "ThreatFox"
 smaller_n = min(tf_recent, url_recent)
-top_ioc = ioc_types.iloc[0]
-top_ioc_pct = top_ioc["count"] / ioc_types["count"].sum() * 100
+ioc_total = ioc_types["count"].sum()
+first_ioc = ioc_types.iloc[0]
+second_ioc = ioc_types.iloc[1]
+first_pct = first_ioc["count"] / ioc_total * 100
+second_pct = second_ioc["count"] / ioc_total * 100
+pareto_pct = first_pct + second_pct
 st.markdown(
     f"""
 <div class="callout" style="border-left-color: var(--blue); background: rgba(47,129,247,0.06);">
@@ -500,9 +504,10 @@ st.markdown(
     {bigger_n:,.0f} reports vs {smaller_n:,.0f} from {smaller}. Both feeds saw a sharp uptick
     in late 2025 as the abuse.ch community grew: more reporters, more submissions, more
     visibility into what's happening out there. The daily spikes from December onward are
-    the new baseline. On the {IOC} types:
-    <strong style="color:var(--blue)">{top_ioc_pct:.0f}% are {top_ioc["ioc_type"]}</strong>,
-    because most malware infrastructure runs on cheap, disposable network endpoints.
+    the new baseline. On the {IOC} types: <strong style="color:var(--blue)">{first_ioc["ioc_type"]}</strong>
+    ({first_pct:.0f}%) and <strong style="color:var(--blue)">{second_ioc["ioc_type"]}</strong>
+    ({second_pct:.0f}%) account for {pareto_pct:.0f}% of all indicators. Most malware
+    infrastructure runs on cheap IP addresses and throwaway domain names.
 </div>
 """,
     unsafe_allow_html=True,
@@ -563,8 +568,9 @@ max_val = families["daily_count"].max()
 tree_colors = [
     f"rgba(47,129,247,{0.3 + 0.7 * (v / max_val):.2f})" for v in families["daily_count"]
 ]
+FALLBACK_DESC = "No description on file. Try malpedia.caad.fkie.fraunhofer.de for details."
 hover_texts = [
-    f"<b>{row.malware_family}</b><br>{row.daily_count} IOCs<br><br><i>{MALWARE_INFO.get(row.malware_family, '')}</i>"
+    f"<b>{row.malware_family}</b><br>{row.daily_count} IOCs<br><br><i>{MALWARE_INFO.get(row.malware_family, FALLBACK_DESC)}</i>"
     for _, row in families.iterrows()
 ]
 
